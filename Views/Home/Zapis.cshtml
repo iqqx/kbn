@@ -1,0 +1,67 @@
+@{
+ViewData["Title"] = "Запись";
+}
+
+<div class="max-w-1150 mx-auto mt-125 mb-275 flex flex-col gap-32 px-16">
+    <h1 class="text-5xl">Запись</h1>
+    <h2 class="text-3xl text-[#1654A4]">Мы ждём от вас заявки.</h2>
+    <div class="flex gap-80 flex-col md:flex-row">
+        @using(Html.BeginForm("RegisterCallback", "Home", FormMethod.Post, new {@class = "flex flex-col gap-16"})) {
+        <input required name="name" class="px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
+            placeholder="Имя(обязательно)">
+        <input required type="phone" name="phone" class="px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
+            placeholder="Номер телефона(обязательно)">
+        <select name="place" required class="cursor-pointer px-50 py-25 text-[#1654A4] text-sm sm:text-2xl">
+            @foreach (var item in ViewBag.Places) {
+            <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <p class="flex items-start gap-10 text-lg text-[#1654A4]"><input name="check" required type="checkbox"
+                class="block cursor-pointer max-w-35 max-h-35 w-full h-full appearance-none border-5 border-[#10D953] bg-[#71AAF4] checked:bg-[#10D953]">ПРЕДОСТАВЛЯЯ
+            СВОИ ДАННЫЕ, ВЫ СОГЛАШАЕТЕСЬ НА ПОЛУЧЕНИЕ СООБЩЕНИЙ ПО
+            ЭЛЕКТРОННОЙ ПОЧТЕ. ВЫ МОЖЕТЕ
+            ОТКАЗАТЬСЯ ОТ ПОДПИСКИ В ЛЮБОЕ ВРЕМЯ</p>
+        <button class="bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer py-8">Отправить</button>
+        }
+        <div class="flex flex-col">
+            <a class="text-2xl text-[#1654A4] underline"
+                href="mailto:diabetvologda35@gmail.com">diabetvologda35<wbr>@@gmail.com</a>
+            <p class="text-2xl text-[#1654A4]">8 (8172) 53-00-44</p>
+            <p class="text-2xl text-[#1654A4] mt-32">г.Вологда, <a href="#" class="underline">Герцена ул. 42</a></p>
+        </div>
+    </div>
+</div>
+
+<div id="map" class="w-full max-w-1150 h-470 mx-auto mb-250 px-16"></div>
+<script src="https://api-maps.yandex.ru/v3/?apikey=e9f1d776-34b8-40fd-a1be-9abe88bcad5e&lang=ru_RU"></script>
+<script>
+    initMap();
+
+    async function initMap() {
+        // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
+        await ymaps3.ready;
+
+        const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+
+        // Иницилиазируем карту
+        const map = new YMap(
+            // Передаём ссылку на HTMLElement контейнера
+            document.getElementById('map'),
+
+            // Передаём параметры инициализации карты
+            {
+                location: {
+                    // Координаты центра карты
+                    center: [39.894523, 59.211382],
+
+                    // Уровень масштабирования
+                    zoom: 17.36
+                }
+            }
+        );
+
+
+        // Добавляем слой для отображения схематической карты
+        map.addChild(new YMapDefaultSchemeLayer());
+    }
+</script>

@@ -1,0 +1,26 @@
+@{
+ViewData["Title"] = "Контакты";
+}
+
+<div class="max-w-1150 mx-auto mt-125 mb-450 flex flex-col gap-32 px-16">
+    <h1 class="text-5xl">Контакты</h1>
+    <h2 class="text-3xl text-[#1654A4]">Остались вопросы? Если да то мы ждём от вас заявки.</h2>
+    <div class="flex gap-80">
+        @using(Html.BeginForm("RegisterQuestion", "Home", FormMethod.Post, new {@class = "flex flex-col gap-16"})) {
+        <input name="name" class="px-50 py-25 text-[#1654A4] text-sm sm:text-2xl" placeholder="Имя(обязательно)">
+        <input name="phone" class="px-50 py-25 text-sm text-[#1654A4] sm:text-2xl"
+            placeholder="Номер телефона(обязательно)">
+        <input name="question" class="px-50 py-25 text-sm text-[#1654A4] sm:text-2xl" placeholder="Пишите вопросы.">
+        <p class="flex items-start gap-10 text-lg text-[#1654A4]"><input name="check" required type="checkbox" class="block cursor-pointer max-w-35 max-h-35 w-full h-full appearance-none border-5 border-[#10D953] bg-[#71AAF4] checked:bg-[#10D953]">ПРЕДОСТАВЛЯЯ СВОИ ДАННЫЕ, ВЫ СОГЛАШАЕТЕСЬ НА ПОЛУЧЕНИЕ СООБЩЕНИЙ ПО
+            ЭЛЕКТРОННОЙ ПОЧТЕ. ВЫ МОЖЕТЕ
+            ОТКАЗАТЬСЯ ОТ ПОДПИСКИ В ЛЮБОЕ ВРЕМЯ</p>
+        <button class="bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer py-8">Отправить</button>
+        }
+        <div class="flex flex-col">
+            <a class="text-2xl text-[#1654A4] underline"
+                href="mailto:diabetvologda35@gmail.com">diabetvologda35@gmail.com</a>
+            <p class="text-2xl text-[#1654A4]">8 (8172) 53-00-44</p>
+            <p class="text-2xl text-[#1654A4] mt-32">г.Вологда, <a href="#" class="underline">Герцена ул. 42</a></p>
+        </div>
+    </div>
+</div>

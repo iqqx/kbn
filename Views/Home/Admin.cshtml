@@ -1,0 +1,62 @@
+@{
+ViewData["Title"] = "Администрирование";
+}
+
+<div class="flex h-1000">
+    <aside class="flex flex-col gap-8 bg-slate-600 w-200 h-full text-white py-16">
+        @using(Html.BeginForm("Logout", "Home", FormMethod.Post)) {
+        <button class="px-16 text-red-500 cursor-pointer mb-10 border-1 border-white py-2 ml-16 bg-slate-500 hover:bg-red-900 transition-colors rounded-2xl">Выйти</button>
+        }
+        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Places">Места</a>
+        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Callbacks">Записи</a>
+        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Questions">Вопросы</a>
+    </aside>
+
+    <div class="flex flex-col gap-32 items-start p-16 overflow-auto">
+        @if (ViewBag.Name is not null) {
+        <h1 class="text-3xl font-black border-b-2 border-black">@ViewBag.Name</h1>
+
+        <table>
+            <thead>
+                @foreach (var header in ViewBag.Headers) {
+                <th class="p-16 border-b-1">@header.Name</th>
+                }
+                <th></th>
+            </thead>
+            <tbody>
+                @foreach (var valueList in ViewBag.Values) {
+                <tr class="p-16">
+                    @foreach(var value in valueList) {
+                    <td class="text-center px-16">@value</td>
+                    }
+                    <td class="p-4">
+                        @using(Html.BeginForm("OnDelete", "Home", FormMethod.Post)) {
+                        @Html.Hidden("Id", (string)valueList[0])
+                        <button
+                            class="text-center px-16 text-white bg-red-900 cursor-pointer hover:bg-black transition-colors">Удалить</button>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (ViewBag.AddUrl is not null) {
+        <div class="flex flex-col mt-16 border-2 p-8">
+            @using(Html.BeginForm((string)ViewBag.AddUrl, "Home", FormMethod.Post, new {@class = "flex flex-col gap-8"})) {
+            @foreach (var header in ViewBag.Headers) {
+            @if (header.Input is not null) {
+            <input class="bg-slate-200 text-black p-8" name="@header.Input" required placeholder="@header.Name">
+            }
+            }
+            <div class="flex items-center justify-start gap-16">
+                <button
+                    class="bg-slate-300 self-start px-32 py-4 cursor-pointer hover:bg-slate-400 transition-colors">Добавить</button>
+                <h1 class="text-2xl text-red-600">@ViewBag.AddError</h1>
+            </div>
+            }
+        </div>
+        }
+        }
+    </div>
+</div>

@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: Inter;
+    src: url("fonts/Inter-V.ttf") format("truetype")
+}
+
+@theme {
+    --font-main: Inter;
+
+    --spacing: 1px;
+}
+
+div {
+    scrollbar-width: thin;
+    scrollbar-color: white transparent;
+}
+
+html {
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}

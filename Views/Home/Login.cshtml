@@ -1,0 +1,59 @@
+@{
+ViewData["Title"] = "Авторизация";
+}
+
+<style>
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+
+        padding: 20px 20px;
+
+        background-color: #1654A4;
+        border-radius: 10px;
+
+        box-shadow: 0 0 20px 0 black;
+    }
+
+    .login-form>h1 {
+        color: white;
+        font-size: 24px;
+        align-self: flex-start;
+    }
+
+    .login-form>form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+    }
+
+    .login-form>form>input {
+        padding: 10px;
+        background-color: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+
+        color: white;
+    }
+
+    .login-form>form>label {
+        color: white;
+    }
+</style>
+
+<div class="bg-[url('/images/back.png')] py-300">
+    <div class="login-form max-w-300 mx-auto">
+        <h1 class="mb-10">Авторизация</h1>
+        @using(Html.BeginForm("PostLogin", "Home", FormMethod.Post)){
+        @Html.Label("Login", "Имя пользователя")
+        @Html.TextBox("Login", "")
+        @Html.Label("Password", "Пароль")
+        @Html.Password("Password", "")
+        @Html.Hidden("ReturnUrl", Context.Request.Query["ReturnUrl"])
+        <button class="bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer py-8">Отправить</button>
+        }
+    </div>
+</div>
