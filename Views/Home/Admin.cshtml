@@ -4,14 +4,33 @@ ViewData["Title"] = "Администрирование";
 
 <div class="flex h-1000">
     <aside class="flex flex-col gap-8 bg-slate-600 w-200 h-full text-white py-16">
-        @using(Html.BeginForm("Logout", "Home", FormMethod.Post)) {
+        @using(Html.BeginForm("Logout", "Home", FormMethod.Post, new {@class = "flex max-w-full w-full px-16"})) {
         <button
-            class="px-16 text-red-500 cursor-pointer mb-10 border-1 border-white py-2 ml-16 bg-slate-500 hover:bg-red-900 transition-colors rounded-2xl">Выйти</button>
+            class="w-full px-16 text-red-500 cursor-pointer mb-10 border-1 border-white py-2 bg-slate-500 hover:bg-red-900 transition-colors">Выйти</button>
         }
-        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500"
+        <h1
+            class="text-center font-bold border-t-2 bg-slate-500 border-white py-4 shadow-[0_4px_4px_0_rgba(0,0,0,.5)]">
+            Карточки</h1>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
             href="/Admin?Entity=Places">Мероприятия</a>
-        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Callbacks">Записи</a>
-        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Questions">Вопросы</a>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=EventPhotos">Фото с мероприятий</a>
+        <h1
+            class="text-center font-bold border-t-2 bg-slate-500 border-white py-4 shadow-[0_4px_4px_0_rgba(0,0,0,.5)]">
+            Заявки</h1>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=Callbacks">Записи</a>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=Questions">Вопросы</a>
+        <h1
+            class="text-center font-bold border-t-2 bg-slate-500 border-white py-4 shadow-[0_4px_4px_0_rgba(0,0,0,.5)]">
+            Страницы</h1>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=PD1Type">Диабет 1 типа</a>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=PD2Type">Диабет 2 типа</a>
+        <a class="cursor-pointer border-b-1 border-white border-dashed mx-8 text-2xl px-8 hover:bg-slate-500"
+            href="/Admin?Entity=PSoveti">Для близких</a>
     </aside>
 
     <div class="flex flex-col gap-32 items-start p-16 overflow-auto">
@@ -93,6 +112,14 @@ ViewData["Title"] = "Администрирование";
         <h1 class="text-red-400">@ViewBag.AnswerMessage</h1>
         }
         }
+        }
+        } else if (ViewBag.HTMLName is not null) {
+        <h1 class="text-3xl font-black border-b-2 border-black">@ViewBag.HTMLName</h1>
+
+        @using(Html.BeginForm("SaveHTML", "Home", FormMethod.Post, new {@class = "flex flex-col gap-32 w-full"})) {
+        <button
+            class="bg-slate-300 self-start px-32 py-4 cursor-pointer hover:bg-slate-400 transition-colors border-l-8 border-green-500 rounded-lg">Сохранить</button>
+        <textarea name="text" class="border-2 p-8 resize min-w-full min-h-500">@ViewBag.HTMLBody</textarea>
         }
         }
     </div>

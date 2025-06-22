@@ -41,10 +41,13 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions()
 
 app.UseStatusCodePages(async options =>
 {
-    if (options.HttpContext.Response.StatusCode == 401)
-        options.HttpContext.Response.Redirect("/login");
-    else if (options.HttpContext.Response.StatusCode == 404)
-        options.HttpContext.Response.Redirect("/notfound");
+    await Task.Run(() =>
+    {
+        if (options.HttpContext.Response.StatusCode == 401)
+            options.HttpContext.Response.Redirect("/login");
+        else if (options.HttpContext.Response.StatusCode == 404)
+            options.HttpContext.Response.Redirect("/notfound");
+    });
 });
 
 app.UseRouting();

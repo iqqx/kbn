@@ -48,9 +48,9 @@
         </nav>
         <div class="flex flex-col md:hidden">
             <button class="block max-w-16 max-h-16 w-full h-full rotate-90 text-4xl"
-                onclick="document.getElementById('mobile-nav').style.opacity = document.getElementById('mobile-nav').style.opacity === '1' ? '0': '1'">|||</button>
+                onclick="document.getElementById('mobile-nav').style.opacity = document.getElementById('mobile-nav').style.opacity === '1' ? '': '1';document.getElementById('mobile-nav').style.pointerEvents = document.getElementById('mobile-nav').style.opacity === '1' ? 'auto': ''">|||</button>
             <nav id="mobile-nav"
-                class="absolute top-150 left-0 m-16 p-16 w-[calc(100%-32px)] flex-col gap-16 transition-opacity flex opacity-0 bg-slate-500">
+                class="pointer-events-none absolute top-150 left-0 m-16 p-16 w-[calc(100%-32px)] flex-col gap-16 transition-opacity flex opacity-0 bg-slate-500">
                 <a class="bg-slate-600 p-8 text-center underline" href="/">Диабет Вологодская область</a>
                 <a class="bg-slate-600 p-8 text-center" href="/Events">Мероприятия</a>
                 <a class="bg-slate-600 p-8 text-center" href="/D1t">1 тип</a>

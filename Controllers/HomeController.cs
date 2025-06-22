@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
 using Microsoft.AspNetCore.StaticFiles;
+using System.Text.RegularExpressions;
 
 namespace kaban.Controllers;
 
-public class HomeController(Context context) : Controller
+public partial class HomeController(Context context) : Controller
 {
     private readonly Context _context = context;
 
@@ -98,6 +99,67 @@ public class HomeController(Context context) : Controller
         _context.SaveChanges();
 
         return Redirect("Admin?entity=Places");
+    }
+
+    [Authorize, HttpPost]
+    public IActionResult AddEventPhoto()
+    {
+        var name = Request.Form["name"];
+        IFormFile? image = null;
+
+        if (string.IsNullOrWhiteSpace(name[0]))
+        {
+            TempData["AddError"] = "Имя не указано.";
+
+            return Redirect("Admin?entity=EventPhotos");
+        }
+
+        if (_context.EventPhotos.Any(x => x.Name == name[0]))
+        {
+            TempData["AddError"] = "Такое мероприятие уже существует.";
+
+            return Redirect("Admin?entity=EventPhotos");
+        }
+
+        if (_context.EventPhotos.Count() >= 2)
+        {
+            TempData["AddError"] = "Превышено максимальное количество.";
+
+            return Redirect("Admin?entity=EventPhotos");
+        }
+
+        foreach (var file in Request.Form.Files)
+        {
+            image = file;
+            break;
+        }
+
+        if (image is null && string.IsNullOrEmpty(Request.Form["url-image"][0]))
+        {
+            TempData["AddError"] = "Изображение не указано.";
+
+            return Redirect("Admin?entity=EventPhotos");
+        }
+
+        string imageUrl;
+        if (image is not null)
+        {
+            string imageName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName()) + Path.GetExtension(image.FileName);
+
+            if (!Directory.Exists($"{Directory.GetCurrentDirectory()}/uploads/"))
+                Directory.CreateDirectory($"{Directory.GetCurrentDirectory()}/uploads");
+
+            using FileStream stream = new($"{Directory.GetCurrentDirectory()}/uploads/{imageName}", FileMode.Create);
+            image.CopyTo(stream);
+
+            imageUrl = $"/imagefile?imageId={imageName}";
+        }
+        else imageUrl = Request.Form["url-image"][0]!.Trim();
+
+        _context.EventPhotos.Add(new EventPhotoEntity() { Name = name[0]!, ImageId = imageUrl });
+        _context.SaveChanges();
+
+        return Redirect("Admin?entity=EventPhotos");
     }
 
     [HttpPost]
@@ -204,6 +266,31 @@ public class HomeController(Context context) : Controller
     }
 
     [Authorize, HttpPost]
+    public IActionResult SaveHTML()
+    {
+        var referer = Request.Headers.Referer.FirstOrDefault();
+        if (referer is null)
+            return Redirect("/Admin");
+
+        var text = Request.Form["text"].FirstOrDefault() ?? "";
+        var entity = referer[(referer.LastIndexOf('=') + 1)..];
+
+        var body = _context.HTMLBodies.Where(x => x.Name == entity).FirstOrDefault();
+        if (body is null)
+        {
+            _context.HTMLBodies.Add(new() { Name = entity, Text = text });
+        }
+        else
+        {
+            body.Text = text;
+        }
+
+        _context.SaveChanges();
+
+        return Redirect(referer);
+    }
+
+    [Authorize, HttpPost]
     public IActionResult OnDelete()
     {
         var referer = Request.Headers.Referer.FirstOrDefault();
@@ -230,6 +317,17 @@ public class HomeController(Context context) : Controller
                     if (val is not null)
                     {
                         _context.Places.Remove(val);
+                        _context.SaveChanges();
+                    }
+
+                    break;
+                }
+            case "=EventPhotos":
+                {
+                    var val = _context.EventPhotos.Where(x => x.Id.ToString() == Request.Form["Id"][0]).FirstOrDefault();
+                    if (val is not null)
+                    {
+                        _context.EventPhotos.Remove(val);
                         _context.SaveChanges();
                     }
 
@@ -264,6 +362,14 @@ public class HomeController(Context context) : Controller
                     ViewBag.Values = _context.Places.Select(x => new string[] { x.Id.ToString(), x.Name, $"{x.ImageId}|{(x.ImageId.StartsWith('/') ? x.ImageId.Substring(x.ImageId.LastIndexOf('=') + 1) : x.ImageId.Substring(x.ImageId.LastIndexOf('/') + 1))}" }).ToArray();
                     break;
                 }
+            case "EventPhotos":
+                {
+                    ViewBag.Name = "Фото мероприятий";
+                    ViewBag.AddUrl = "AddEventPhoto";
+                    ViewBag.Headers = (dynamic[])[new { Name = "Номер", Input = (string?)null }, new { Name = "Название", Input = "name", Type = (string?)null }, new { Name = "Изображение", Input = "image", Type = "img" }];
+                    ViewBag.Values = _context.EventPhotos.Select(x => new string[] { x.Id.ToString(), x.Name, $"{x.ImageId}|{(x.ImageId.StartsWith('/') ? x.ImageId.Substring(x.ImageId.LastIndexOf('=') + 1) : x.ImageId.Substring(x.ImageId.LastIndexOf('/') + 1))}" }).ToArray();
+                    break;
+                }
             case "Callbacks":
                 {
                     ViewBag.Name = "Заявки";
@@ -274,7 +380,7 @@ public class HomeController(Context context) : Controller
                         new { Name = "Место", Input = "place", Type=(string?)null },
                         new { Name = "Дата" , Input= (string?)null, Type=(string?)null}
                         ];
-                    ViewBag.Values = _context.Callbacks.Include(x => x.Place).Select(x => new string[] { x.Id.ToString(), x.Name, x.Phone, x.Place.Name, x.Date.ToLocalTime().ToString("HH:mm dd MMM yyyy") }).ToArray();
+                    ViewBag.Values = _context.Callbacks.Include(x => x.Place).Select(x => new string[] { x.Id.ToString(), x.Name, x.Phone, x.Place.Name, x.Date.ToLocalTime().ToString("HH:mm dd.MM.yyyy") }).ToArray();
                     break;
                 }
             case "Questions":
@@ -287,13 +393,34 @@ public class HomeController(Context context) : Controller
                         new { Name = "Вопрос", Input = "question" , Type=(string?)null},
                         new { Name = "Дата" , Input= (string?)null, Type=(string?)null}
                       ];
-                    ViewBag.Values = _context.Questions.Where(x => !x.Answered).Select(x => new string[] { x.Id.ToString(), x.Name, x.Phone, x.Question, x.Date.ToLocalTime().ToString("HH:mm dd MMM yyyy") }).ToArray();
+                    ViewBag.Values = _context.Questions.Where(x => !x.Answered).Select(x => new string[] { x.Id.ToString(), x.Name, x.Phone, x.Question, x.Date.ToLocalTime().ToString("HH:mm dd.MM.yyyy") }).ToArray();
 
                     ViewBag.AnswerIsSuccess = TempData["AnswerIsSuccess"] ?? true;
                     ViewBag.AnswerMessage = TempData["AnswerMessage"] ?? "";
 
                     TempData["AnswerIsSuccess"] = null;
                     TempData["AnswerMessage"] = null;
+
+                    break;
+                }
+            case "PD1Type":
+                {
+                    ViewBag.HTMLName = "Страница: Диабет 1 типа";
+                    ViewBag.HTMLBody = _context.HTMLBodies.Where(x => x.Name == "PD1Type").Select(x => x.Text).FirstOrDefault() ?? "";
+
+                    break;
+                }
+            case "PD2Type":
+                {
+                    ViewBag.HTMLName = "Страница: Диабет 2 типа";
+                    ViewBag.HTMLBody = _context.HTMLBodies.Where(x => x.Name == "PD2Type").Select(x => x.Text).FirstOrDefault() ?? "";
+
+                    break;
+                }
+            case "PSoveti":
+                {
+                    ViewBag.HTMLName = "Страница: Информация для близких";
+                    ViewBag.HTMLBody = _context.HTMLBodies.Where(x => x.Name == "PSoveti").Select(x => x.Text).FirstOrDefault() ?? "";
 
                     break;
                 }
@@ -319,17 +446,26 @@ public class HomeController(Context context) : Controller
 
     public IActionResult D1t()
     {
+        var text = _context.HTMLBodies.Where(x => x.Name == "PD1Type").Select(x => x.Text).FirstOrDefault() ?? "";
+        text = UrlRegex().Replace(text, "<a class='underline' href='https://$0'>$0</a>");
+        ViewBag.HTMLBody = text;
+
         return View();
     }
 
     public IActionResult D2t()
     {
+        var text = _context.HTMLBodies.Where(x => x.Name == "PD2Type").Select(x => x.Text).FirstOrDefault() ?? "";
+        text = UrlRegex().Replace(text, "<a class='underline' href='https://$0'>$0</a>");
+        ViewBag.HTMLBody = text;
+
         return View();
     }
 
     public IActionResult Events()
     {
         ViewBag.Events = _context.Places.Select(x => new { x.Name, Image = x.ImageId }).ToArray();
+        ViewBag.EventPhotos = _context.EventPhotos.Select(x => new { x.Name, Image = x.ImageId }).ToArray();
 
         return View();
     }
@@ -346,6 +482,10 @@ public class HomeController(Context context) : Controller
 
     public IActionResult Soveti()
     {
+        var text = _context.HTMLBodies.Where(x => x.Name == "PSoveti").Select(x => x.Text).FirstOrDefault() ?? "";
+        text = UrlRegex().Replace(text, "<a class='underline' href='https://$0'>$0</a>");
+        ViewBag.HTMLBody = text;
+
         return View();
     }
 
@@ -366,10 +506,10 @@ public class HomeController(Context context) : Controller
     [HttpPost]
     public async Task<IActionResult> PostLogin()
     {
-        var name = Request.Form["Login"];
-        var pswd = Request.Form["Password"];
+        var name = Request.Form["Login"].FirstOrDefault();
+        var pswd = Request.Form["Password"].FirstOrDefault();
 
-        if (pswd != "admin1") return Redirect("/login");
+        if (name is null || pswd is not "1464") return Redirect("/login");
 
         string username;
         string role;
@@ -395,6 +535,9 @@ public class HomeController(Context context) : Controller
         HttpContext.Session.SetString("Username", username);
         await HttpContext.SignInAsync("session", new ClaimsPrincipal(claimsIdentity));
 
-        return Redirect(Request.Form["ReturnUrl"][0] ?? "/");
+        return Redirect(Request.Form["ReturnUrl"].FirstOrDefault() ?? "/");
     }
+
+    [GeneratedRegex(@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)")]
+    private static partial Regex UrlRegex();
 }

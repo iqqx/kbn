@@ -25,7 +25,7 @@ ViewData["Title"] = "Диабет 35";
 </div>
 
 <div class="flex flex-col items-center w-full max-w-1100 mx-auto px-16">
-    <h1 class="whitespace-pre-line text-[#73BCC4] font-black text-3xl my-100">
+    <h1 class="whitespace-pre-line text-[#73BCC4] text-3xl my-100">
         Добро пожаловать на сайт «Поддержка больных диабетом» — ваш надежный помощник в повседневной жизни с диабетом.
 
         Здесь вы найдете актуальную информацию о заболевании, советы по правильному питанию, рекомендации по контролю
@@ -40,11 +40,11 @@ ViewData["Title"] = "Диабет 35";
         Откройте для себя мир возможностей
         Мы не просто предлагаем решения, а переопределяем возможности.
     </h1>
-    <a href="/Events" class="bg-[#73BCC4] px-12 py-8 mt-32 text-white font-black cursor-pointer">Подробнее</a>
+    <a href="/Events" class="bg-[#73BCC4] px-12 py-8 mt-32 text-white cursor-pointer">Подробнее</a>
 </div>
 
 <div class="max-w-1000 w-full mx-auto px-16 flex flex-col gap-100 my-250">
-    <h1 class="font-black text-5xl text-[#73BCC4]">Наши волонтеры</h1>
+    <h1 class="text-5xl text-[#73BCC4]">Наши волонтеры</h1>
     <img class="w-full" src="~/images/index.png">
 </div>
 
@@ -59,12 +59,12 @@ ViewData["Title"] = "Диабет 35";
         <h1 class="text-[#1654A4] text-5xl">Остались вопросы?</h1>
         <p class="text-[#1654A4] opacity-50">Оставьте заявку, и наши специалисты свяжутся с вами!</p>
         <div class="flex flex-col md:flex-row justify-between gap-32">
-            <input name="name" class="focus:border-[#15509c] w-full border-b-2 border-[#15509c3a] text-[#15509C] py-10"
+            <input name="name" maxlength="64" class="focus:border-[#15509c] w-full border-b-2 border-[#15509c3a] text-[#15509C] py-10"
                 placeholder="Ваше имя">
-            <input name="email" type="email"
+            <input name="email" maxlength="64" type="email"
                 class="focus:border-[#15509c3a] w-full border-b-2 border-[#15509C3a] text-[#15509C] py-10"
                 placeholder="Напишите свой email">
-            <input name="question"
+            <input name="question" maxlength="128"
                 class="focus:border-[#15509c] w-full border-b-2 border-[#15509c3a] text-[#15509C] py-10"
                 placeholder="Вопрос">
             <input type="hidden" class="hidden" name="ReturnUrl" value="/#zapis">
@@ -72,7 +72,7 @@ ViewData["Title"] = "Диабет 35";
         <div class="flex gap-32 flex-col md:flex-row items-start">
             <div class="flex items-start gap-16 h-full">
                 <input name="check" id="check-afert" required type="checkbox"
-                    class="block cursor-pointer max-w-35 max-h-35 w-full h-full appearance-none border-5 border-[#10D953] bg-[#71AAF4] checked:bg-[#10D953]">
+                    class="block cursor-pointer min-w-35 min-h-35 max-w-35 max-h-35 w-full h-full appearance-none border-5 border-[#10D953] bg-[#71AAF4] checked:bg-[#10D953]">
                 <label for="check-afert">ПРЕДОСТАВЛЯЯ
                     СВОИ ДАННЫЕ, ВЫ СОГЛАШАЕТЕСЬ НА ПОЛУЧЕНИЕ СООБЩЕНИЙ ПО
                     ЭЛЕКТРОННОЙ ПОЧТЕ. ВЫ МОЖЕТЕ

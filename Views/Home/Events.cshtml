@@ -24,7 +24,7 @@ ViewData["Title"] = "Мероприятия";
         <li>Диасмены для детей в загородных и городских лагерях</li>
         <li>Диаспортакиады</li>
         <li>Праздники для детей и взрослых</li>
-        <li> Реализацию проекта «Школа равного наставничества. Новые возможности», направленного на поддержку семей,
+        <li>Реализацию проекта «Школа равного наставничества. Новые возможности», направленного на поддержку семей,
             воспитывающих детей с сахарным диабетом.</li>
     </ul>
     <p class="text-[#1654A4] text-3xl mt-64">Любая проблема — это возможность получить высококлассную поддержку. Мы
@@ -40,14 +40,12 @@ ViewData["Title"] = "Мероприятия";
 <div class="max-w-1150 mx-auto mt-115 px-16">
     <h1 class="text-5xl mb-50">Фото с мероприятий</h1>
     <div class="flex justify-center flex-wrap gap-70">
+        @foreach (var item in ViewBag.EventPhotos) {
         <div class="flex flex-col gap-50 min-w-150 max-w-500 flex-1">
-            <img src="~/images/onas/1-1.png" class="h-335 object-cover w-full">
-            <p class="text-[#1654A4] text-lg text-center">Тренировки по футболу с тренерами “Динамо”</p>
+            <img src="@item.Image" class="h-335 object-cover w-full">
+            <p class="text-[#1654A4] text-lg text-center">@item.Name</p>
         </div>
-        <div class="flex flex-col gap-50 min-w-150 max-w-500 flex-1">
-            <img src="~/images/onas/1-2.png" class="h-335 object-cover w-full">
-            <p class="text-[#1654A4] text-lg text-center">Диа Спортакиада 2025.</p>
-        </div>
+        }
     </div>
 </div>
 
