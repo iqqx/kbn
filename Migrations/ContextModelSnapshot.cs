@@ -59,6 +59,10 @@ namespace kaban.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ImageId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -75,6 +79,9 @@ namespace kaban.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Answered")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");

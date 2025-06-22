@@ -7,23 +7,24 @@ ViewData["Title"] = "Запись";
     <h2 class="text-3xl text-[#1654A4]">Мы ждём от вас заявки.</h2>
     <div class="flex gap-80 flex-col md:flex-row">
         @using(Html.BeginForm("RegisterCallback", "Home", FormMethod.Post, new {@class = "flex flex-col gap-16"})) {
-        <input required name="name" class="px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
+        <input required name="name" class="bg-white px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
             placeholder="Имя(обязательно)">
-        <input required type="phone" name="phone" class="px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
-            placeholder="Номер телефона(обязательно)">
-        <select name="place" required class="cursor-pointer px-50 py-25 text-[#1654A4] text-sm sm:text-2xl">
+        <input required type="email" name="email" class="bg-white px-50 py-25 text-[#1654A4] text-sm sm:text-2xl"
+            placeholder="Электронная почта(обязательно)">
+        <select name="place" required class="bg-white cursor-pointer px-50 py-25 text-[#1654A4] text-sm sm:text-2xl">
             @foreach (var item in ViewBag.Places) {
             <option value="@item.Id">@item.Name</option>
             }
         </select>
-        <p class="flex items-start gap-10 text-lg text-[#1654A4]"><input name="check" required type="checkbox"
+        <label for="check-afert" class="flex items-start gap-10 text-lg text-[#1654A4]"><input name="check" required type="checkbox" id="check-afert"
                 class="block cursor-pointer max-w-35 max-h-35 w-full h-full appearance-none border-5 border-[#10D953] bg-[#71AAF4] checked:bg-[#10D953]">ПРЕДОСТАВЛЯЯ
             СВОИ ДАННЫЕ, ВЫ СОГЛАШАЕТЕСЬ НА ПОЛУЧЕНИЕ СООБЩЕНИЙ ПО
             ЭЛЕКТРОННОЙ ПОЧТЕ. ВЫ МОЖЕТЕ
-            ОТКАЗАТЬСЯ ОТ ПОДПИСКИ В ЛЮБОЕ ВРЕМЯ</p>
+            ОТКАЗАТЬСЯ ОТ ПОДПИСКИ В ЛЮБОЕ ВРЕМЯ</label>
         <button class="bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer py-8">Отправить</button>
+        <h1 class="text-center w-full text-green-500 text-2xl">@ViewBag.AddInfo</h1>
         }
-        <div class="flex flex-col">
+        <div class="flex flex-col w-full max-w-320">
             <a class="text-2xl text-[#1654A4] underline"
                 href="mailto:diabetvologda35@gmail.com">diabetvologda35<wbr>@@gmail.com</a>
             <p class="text-2xl text-[#1654A4]">8 (8172) 53-00-44</p>
@@ -41,7 +42,12 @@ ViewData["Title"] = "Запись";
         // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
         await ymaps3.ready;
 
-        const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+        ymaps3.import.registerCdn('https://cdn.jsdelivr.net/npm/{package}', [
+            '@@yandex/ymaps3-default-ui-theme@0.0.19'
+        ]);
+
+        const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+        const { YMapDefaultMarker } = await ymaps3.import('@@yandex/ymaps3-default-ui-theme');
 
         // Иницилиазируем карту
         const map = new YMap(
@@ -52,6 +58,7 @@ ViewData["Title"] = "Запись";
             {
                 location: {
                     // Координаты центра карты
+                    // 39.87104, 59.20284, 
                     center: [39.894523, 59.211382],
 
                     // Уровень масштабирования
@@ -60,8 +67,14 @@ ViewData["Title"] = "Запись";
             }
         );
 
+        const marker = new YMapDefaultMarker({
+            title: 'Диабет35',
+            coordinates: [39.894523, 59.211382]
+        });
 
         // Добавляем слой для отображения схематической карты
-        map.addChild(new YMapDefaultSchemeLayer());
+        map.addChild(new YMapDefaultSchemeLayer())
+            .addChild(new YMapDefaultFeaturesLayer({ zIndex: 1800 }))
+            .addChild(marker);
     }
 </script>

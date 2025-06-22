@@ -5,9 +5,11 @@ ViewData["Title"] = "Администрирование";
 <div class="flex h-1000">
     <aside class="flex flex-col gap-8 bg-slate-600 w-200 h-full text-white py-16">
         @using(Html.BeginForm("Logout", "Home", FormMethod.Post)) {
-        <button class="px-16 text-red-500 cursor-pointer mb-10 border-1 border-white py-2 ml-16 bg-slate-500 hover:bg-red-900 transition-colors rounded-2xl">Выйти</button>
+        <button
+            class="px-16 text-red-500 cursor-pointer mb-10 border-1 border-white py-2 ml-16 bg-slate-500 hover:bg-red-900 transition-colors rounded-2xl">Выйти</button>
         }
-        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Places">Места</a>
+        <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500"
+            href="/Admin?Entity=Places">Мероприятия</a>
         <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Callbacks">Записи</a>
         <a class="cursor-pointer underline text-2xl px-16 hover:bg-slate-500" href="/Admin?Entity=Questions">Вопросы</a>
     </aside>
@@ -27,7 +29,11 @@ ViewData["Title"] = "Администрирование";
                 @foreach (var valueList in ViewBag.Values) {
                 <tr class="p-16">
                     @foreach(var value in valueList) {
+                    @if (value.StartsWith('/') || value.StartsWith("https://")) {
+                    <td class="text-center px-16 underline"><a href="@value.Split('|')[0]">@value.Split('|')[1]</a></td>
+                    } else {
                     <td class="text-center px-16">@value</td>
+                    }
                     }
                     <td class="p-4">
                         @using(Html.BeginForm("OnDelete", "Home", FormMethod.Post)) {
@@ -36,6 +42,13 @@ ViewData["Title"] = "Администрирование";
                             class="text-center px-16 text-white bg-red-900 cursor-pointer hover:bg-black transition-colors">Удалить</button>
                         }
                     </td>
+                    @if (ViewBag.AnswerUrl is not null) {
+                    <td class="p-4">
+                        <button id="go-asnwer-btn" value="@valueList[0]"
+                            onclick='document.getElementById("answer-id").value = parseInt(this.value); document.getElementById("answer-btn").disabled = false'
+                            class="text-center px-16 text-white bg-green-500 cursor-pointer hover:bg-green-600 transition-colors">Ответить</button>
+                    </td>
+                    }
                 </tr>
                 }
             </tbody>
@@ -43,19 +56,43 @@ ViewData["Title"] = "Администрирование";
 
         @if (ViewBag.AddUrl is not null) {
         <div class="flex flex-col mt-16 border-2 p-8">
-            @using(Html.BeginForm((string)ViewBag.AddUrl, "Home", FormMethod.Post, new {@class = "flex flex-col gap-8"})) {
-            @foreach (var header in ViewBag.Headers) {
-            @if (header.Input is not null) {
-            <input class="bg-slate-200 text-black p-8" name="@header.Input" required placeholder="@header.Name">
-            }
-            }
-            <div class="flex items-center justify-start gap-16">
-                <button
-                    class="bg-slate-300 self-start px-32 py-4 cursor-pointer hover:bg-slate-400 transition-colors">Добавить</button>
-                <h1 class="text-2xl text-red-600">@ViewBag.AddError</h1>
-            </div>
-            }
+            <form class="flex flex-col gap-4" action="@ViewBag.AddUrl" method="post" enctype="multipart/form-data">
+                @foreach (var header in ViewBag.Headers) {
+                @if (header.Input is not null) {
+                if (header.Type is not null) {
+                if (header.Type is "img") {
+                <input class="text-black p-8 cursor-pointer appearance-none bg-emerald-300" name="@header.Input"
+                    type="file" placeholder="@header.Name">
+                <span class="text-center">или</span>
+                <input class="text-black p-8 bg-slate-200" name="url-@header.Input" placeholder="Ссылка">
+                } else {
+                <input class="bg-slate-200 text-black p-8" name="@header.Input" required placeholder="@header.Name">
+                }
+                } else {
+                <input class="bg-slate-200 text-black p-8" name="@header.Input" required placeholder="@header.Name">
+                }
+                }
+                }
+                <div class="flex flex-col w-full items-center justify-end gap-16">
+                    <button
+                        class="bg-slate-300 self-end px-32 py-4 cursor-pointer hover:bg-slate-400 transition-colors">Добавить</button>
+                    <h1 class="text-2xl text-red-600" id="add-error">@ViewBag.AddError</h1>
+                </div>
+            </form>
         </div>
+        } else if (ViewBag.AnswerUrl is not null) {
+        @using(Html.BeginForm((string)ViewBag.AnswerUrl, "Home", FormMethod.Post,
+        new {@class = "flex flex-col gap-8 max-w-400 w-full"})) {
+        <input name="id" class="hidden" id="answer-id">
+        <textarea class="bg-slate-200 text-black p-8" name="Answer" required placeholder="Ответ"></textarea>
+        <button id="answer-btn" disabled
+            class="disabled:opacity-50 bg-slate-300 self-start px-32 py-4 enabled:cursor-pointer enabled:hover:bg-slate-400 transition-colors">Ответить</button>
+        @if (ViewBag.AnswerIsSuccess) {
+        <h1 class="text-green-400">@ViewBag.AnswerMessage</h1>
+        }else {
+        <h1 class="text-red-400">@ViewBag.AnswerMessage</h1>
+        }
+        }
         }
         }
     </div>

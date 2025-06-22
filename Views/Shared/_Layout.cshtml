@@ -8,14 +8,37 @@
 
     <link rel="stylesheet" href="~/default.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(102772267, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            ecommerce: "dataLayer"
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/102772267" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
 </head>
 
-<body>
-    <header class="flex justify-center items-center gap-16 bg-[#5B5B5B] py-32 text-white font-main px-8">
+<body class="bg-[#EFF8FE]">
+    <header
+        class="flex justify-between md:justify-center px-64 items-center gap-16 bg-[#76B7ED] py-32 text-white font-main md:px-8">
         <a href="/Admin" class="max-h-100"><img src="~/images/logo.png" class="max-h-100"></a>
-        <nav class="flex items-center flex-wrap gap-16">
+        <nav class="items-center flex-wrap gap-16 hidden md:flex">
             <a href="/" class=" underline">Диабет Вологодская область</a>
-            <a href="/Onas">О нас</a>
             <a href="/Events">Мероприятия</a>
             <a href="/D1t">1 тип</a>
             <a href="/D2t">2 тип</a>
@@ -23,6 +46,20 @@
             <a href="/Contacts">Контакты</a>
             <a href="/Zapis">Запись</a>
         </nav>
+        <div class="flex flex-col md:hidden">
+            <button class="block max-w-16 max-h-16 w-full h-full rotate-90 text-4xl"
+                onclick="document.getElementById('mobile-nav').style.opacity = document.getElementById('mobile-nav').style.opacity === '1' ? '0': '1'">|||</button>
+            <nav id="mobile-nav"
+                class="absolute top-150 left-0 m-16 p-16 w-[calc(100%-32px)] flex-col gap-16 transition-opacity flex opacity-0 bg-slate-500">
+                <a class="bg-slate-600 p-8 text-center underline" href="/">Диабет Вологодская область</a>
+                <a class="bg-slate-600 p-8 text-center" href="/Events">Мероприятия</a>
+                <a class="bg-slate-600 p-8 text-center" href="/D1t">1 тип</a>
+                <a class="bg-slate-600 p-8 text-center" href="/D2t">2 тип</a>
+                <a class="bg-slate-600 p-8 text-center" href="/Soveti">Информация для близких</a>
+                <a class="bg-slate-600 p-8 text-center" href="/Contacts">Контакты</a>
+                <a class="bg-slate-600 p-8 text-center" href="/Zapis">Запись</a>
+            </nav>
+        </div>
     </header>
 
     <main role="main">
@@ -44,7 +81,7 @@
     <form id="dialog-1" class="hidden">
         <div class="max-w-1000 mx-50">
             <h1 class="text-[#15509C] text-4xl">Политика конфеден&shy;циальности</h1>
-            <p class="text-md">
+            <p class="text-md whitespace-break-spaces">
                 1. Общие положения
                 Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального
                 закона от 27.07.2006. № 152-ФЗ «О персональных данных» (далее — Закон о персональных данных) и

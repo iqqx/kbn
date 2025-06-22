@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@tailwindcss/cli": "^4.1.10",
+    "@yandex/ymaps3-default-ui-theme": "^0.0.19",
     "tailwindcss": "^4.1.10"
   }
 }

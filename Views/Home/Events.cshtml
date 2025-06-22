@@ -2,93 +2,67 @@
 ViewData["Title"] = "Мероприятия";
 }
 
-<div class="max-w-1300 mx-auto mt-140 px-16">
-    <h1 class="text-5xl text-center mb-80">Информация о наши мероприятия</h1>
-    <p class="text-[#1654A4]">
-        Мы проводим мероприятия для детей с сахарным диабетом и для их родителей.
-        Консультации
-        Наши консалтинговые услуги разработаны таким образом, чтобы решить ваши вопросы и направить вас к успеху.
-        Сотрудничество с нами поможет вам превратить трудности в возможности.
-        Обучение
-        Мы верим в преобразующую силу знания. Наши обучающие программы разработаны с целью помощи родителям и детям,
-        укреплять доверие и улучшать свои навыки и взять в свои руки сахарный диабет.
-        DiaCamp (Диабетический лагерь)
-        Мы придерживаемся целостного подхода, уделяя внимание каждому аспекту вашей деятельности, чтобы оптимизировать
-        производительность. Сосредоточив усилия на стратегии и адаптивности, мы претворяем идеи в ощутимые результаты.
-        Поддержка
-        Любая проблема — это возможность получить высококлассную поддержку. Мы вникаем в ваши запросы во всех тонкостях
-        и стремимся оперативно оказывать помощь на любом этапе.</p>
+<img src="~/images/block-1.png" class="h-700 object-cover w-full">
+
+<div class="max-w-1150 mx-auto my-100 px-16">
+    <p class="text-[#1654A4] text-3xl">О нас:</p>
+    <ul class="list-disc text-3xl text-[#1654A4] pl-32 mt-32">
+        <li>Формируем общественное мнение о сахарном диабете, распространяем информацию о компенсации сахарного диабета
+        </li>
+        <li>Оказываем моральную и психологическую поддержку людям с сахарным диабетом</li>
+        <li>Помогаем в достижении людям с сахарным диабетом равных с другими гражданами возможностей участия во всех
+            сферах жизни общества</li>
+        <li>Помогаем с 2013 года</li>
+    </ul>
+</div>
+
+<div class="max-w-1300 mx-auto my-180 px-16">
+    <p class="text-[#1654A4] text-3xl">Мы проводим мероприятия для детей с сахарным диабетом и для их родителей:</p>
+    <ul class="list-disc text-3xl text-[#1654A4] pl-32 mt-32">
+        <li>Консультации психологов (групповые и индивидуальные)</li>
+        <li>Обучение в “Школе диабета”</li>
+        <li>Диасмены для детей в загородных и городских лагерях</li>
+        <li>Диаспортакиады</li>
+        <li>Праздники для детей и взрослых</li>
+        <li> Реализацию проекта «Школа равного наставничества. Новые возможности», направленного на поддержку семей,
+            воспитывающих детей с сахарным диабетом.</li>
+    </ul>
+    <p class="text-[#1654A4] text-3xl mt-64">Любая проблема — это возможность получить высококлассную поддержку. Мы
+        вникаем в
+        ваши запросы во всех тонкостях и стремимся оперативно оказывать помощь на любом этапе.</p>
 </div>
 
 <h1
     class="bg-[url('/images/events/1.jpg')] h-400 bg-center bg-cover flex justify-center items-center text-white text-3xl text-center mt-115 px-16">
-    “Мы не просто предлагаем решения, а<br>переопределяем возможности.”<br>— Happy DiaCamp
+    “Мы не просто предлагаем решения, а<br>переопределяем возможности.”
 </h1>
 
 <div class="max-w-1150 mx-auto mt-115 px-16">
     <h1 class="text-5xl mb-50">Фото с мероприятий</h1>
     <div class="flex justify-center flex-wrap gap-70">
-        <div class="flex flex-col gap-50 max-w-500">
-            <img src="~/images/events/2-1.jpg" class="h-full">
-            <p class="text-[#1654A4] text-lg">Встреча с Ириной Слуцкой_Ледовый дворец_02.06.2016</p>
+        <div class="flex flex-col gap-50 min-w-150 max-w-500 flex-1">
+            <img src="~/images/onas/1-1.png" class="h-335 object-cover w-full">
+            <p class="text-[#1654A4] text-lg text-center">Тренировки по футболу с тренерами “Динамо”</p>
         </div>
-        <div class="flex flex-col gap-50 max-w-500">
-            <img src="~/images/events/2-2.jpg" class="h-full">
-            <p class="text-[#1654A4] text-lg">День диабета_02.11.2020 Запись на мероприятие.</p>
+        <div class="flex flex-col gap-50 min-w-150 max-w-500 flex-1">
+            <img src="~/images/onas/1-2.png" class="h-335 object-cover w-full">
+            <p class="text-[#1654A4] text-lg text-center">Диа Спортакиада 2025.</p>
         </div>
     </div>
 </div>
 
-<div class="max-w-1150 mx-auto mt-125 mb-300 px-16">
+<div class="max-w-1150 mx-auto my-125 px-16">
     <h1 class="text-5xl mb-50">Запись на мероприятие.</h1>
     <div class="flex justify-center flex-wrap gap-100">
+        @foreach (var item in ViewBag.Events) {
         <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-1.jpg" class="h-300 w-300 object-cover">
+            <img src="@item.Image" class="h-300 w-300 object-cover">
             <div class="flex justify-between items-center">
-                <p>Школа наставничества</p>
+                <p>@item.Name</p>
                 <a href="/Zapis"
                     class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
             </div>
         </div>
-        <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-2.jpg" class="h-300 w-300 object-cover">
-            <div class="flex justify-between items-center">
-                <p>Школа диа для родителей</p>
-                <a href="/Zapis"
-                    class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
-            </div>
-        </div>
-        <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-2.jpg" class="h-300 w-300 object-cover">
-            <div class="flex justify-between items-center">
-                <p>Школа диа для подростков</p>
-                <a href="/Zapis"
-                    class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
-            </div>
-        </div>
-        <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-4.jpg" class="h-300 w-300 object-cover">
-            <div class="flex justify-between items-center">
-                <p>Мероприятие</p>
-                <a href="/Zapis"
-                    class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
-            </div>
-        </div>
-        <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-5.jpg" class="h-300 w-300 object-cover">
-            <div class="flex justify-between items-center">
-                <p>Dia Camp</p>
-                <a href="/Zapis"
-                    class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
-            </div>
-        </div>
-        <div class="flex flex-col gap-15">
-            <img src="~/images/events/3-6.jpg" class="h-300 w-300 object-cover">
-            <div class="flex justify-between items-center">
-                <p>Мероприятие</p>
-                <a href="/Zapis"
-                    class="px-15 py-12 bg-linear-to-r from-[#3569CF] to-[#5566BA] text-white cursor-pointer">Запись</a>
-            </div>
-        </div>
+        }
     </div>
 </div>

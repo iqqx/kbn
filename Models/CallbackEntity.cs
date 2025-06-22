@@ -7,5 +7,5 @@ public class CallbackEntity
     public required string Phone { get; set; }
     public required DateTime Date { get; set; }
     public required int PlaceId { get; set; }
-    public PlaceEntity Place { get; set; } 
+    public PlaceEntity Place { get; set; } = null!;
 }
